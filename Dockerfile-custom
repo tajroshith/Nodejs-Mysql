@@ -1,0 +1,38 @@
+# Use an alpine Node.js runtime as a parent image
+FROM node:20-alpine
+
+# Set the working directory in the container for the client
+WORKDIR /usr/src/app/client
+
+# Copy the client package.json and package-lock.json
+COPY client/package*.json .
+
+# Install the client dependencies
+RUN npm install
+
+# Copy the client source code
+COPY client/ .
+
+# Install curl and libc6-compat(optional), then build the client application
+RUN apk add --no-cache curl libc6-compat && npm run build
+
+# Set the working directory in the container for the server
+WORKDIR /usr/src/app/server
+
+# Copy the server package.json and package-lock.json
+COPY server/package*.json .
+
+# Install the server dependencies
+RUN npm install
+
+# Copy the server source code
+COPY server/ .
+
+# Create public directory and copy client build files to the server's public directory
+RUN mkdir public && cp -R /usr/src/app/client/dist/* /usr/src/app/server/public/
+
+# Expose the port the server will run on
+EXPOSE 5000
+
+# Command to run the server
+CMD ["npm", "run", "start"]

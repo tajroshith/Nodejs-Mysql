@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-blue-dep
+  namespace: webapps
+  spec:
+    replcas: 2
+    selector:
+      matchLabels:
+        app: app
+        version: blue
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
+        maxSurge: 2
+    minReadySeconds: 10
+    template:
+      metadata:
+        labels:
+          app: app
+          version: blue
+      spec:
+        containers:
+          - name: app-container
+            image: zookl0/nodejs-mysql:blue
+            ports:
+              - containerPort: 5000
+            env:
+              - name: DB_HOST
+                valueFrom:
+                  configMapKeyRef:
+                    name: mysql-configmap
+                    key: DB_HOST
+              - name: DB_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: mysql-secret
+                    key: DB_USER
+              - name: DB_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: mysql-secret
+                    key: DB_PASSWORD
+              - name: DB_NAME
+                valueFrom:
+                  secretKeyRef:
+                    name: mysql-secret
+                    key: DB_NAME
+            resources:
+              requests:
+                 cpu: 200m
+                 memory: 256Mi
+              limits:
+                 cpu: 500m
+                 memory: 512Mi
+            livenessProbe:
+               httpGet:
+                 port: 5000
+                 path: /
+               initialDelaySeconds: 60
+               periodSeconds: 10
+               timeoutSeconds: 15
+               failureThreshold: 3

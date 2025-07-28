@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: green-blue-dep
+  name: app-green-dep
   namespace: webapps
 spec:
   replicas: 2

@@ -5,7 +5,7 @@ metadata:
   name: mysql
   namespace: webapps
 spec:
-  replcas: 1
+  replicas: 1
   strategy:
     type: Recreate
   selector:

@@ -4,47 +4,47 @@ kind: Deployment
 metadata:
   name: green-blue-dep
   namespace: webapps
-  spec:
-    replcas: 2
-    selector:
-      matchLabels:
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app
+      version: green
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 2
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
         app: app
         version: green
-    strategy:
-      type: RollingUpdate
-      rollingUpdate:
-        maxUnavailable: 1
-        maxSurge: 2
-    minReadySeconds: 10
-    template:
-      metadata:
-        labels:
-          app: app
-          version: green
-      spec:
-        containers:
-          - name: app-container
-            image: zookl0/nodejs-mysql:green
-            ports:
-              - containerPort: 5000
-            env:
-              - name: DB_HOST
-                valueFrom:
-                  configMapKeyRef:
-                    name: mysql-configmap
-                    key: DB_HOST
-              - name: DB_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: mysql-secret
-                    key: DB_USER
-              - name: DB_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: mysql-secret
-                    key: DB_PASSWORD
-              - name: DB_NAME
-                valueFrom:
-                  secretKeyRef:
-                    name: mysql-secret
-                    key: DB_NAME
+    spec:
+      containers:
+        - name: app-container
+          image: zookl0/nodejs-mysql:green
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-configmap
+                  key: DB_HOST
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: DB_PASSWORD
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: DB_NAME

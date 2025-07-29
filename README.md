@@ -81,7 +81,7 @@ The Jenkins pipeline, defined in the `Jenkinsfile`, automates the build, test, s
 11. **Verify Deployments**:
     - Checks the status of pods with the specified `version` label and the `app-service` service in the `webapps` namespace.
 
-The pipeline connects to an EKS cluster (`<Cluster-Name>`) at `<Cluster-Endpoint>` using `service-token` credentials.
+The pipeline connects to an EKS cluster (`<Cluster-Name>`) at `<Cluster-Endpoint>` using `serviceaccount-token` credentials.
 
 ## Prerequisites
 
@@ -90,12 +90,12 @@ The pipeline connects to an EKS cluster (`<Cluster-Name>`) at `<Cluster-Endpoint
 - **Docker**: For building and running containers.
 - **Kubernetes**: An EKS cluster or equivalent.
 - **kubectl**: Kubernetes command-line tool.
-- **Jenkins**: With plugins for Git, Docker, Kubernetes, SonarQube, and Trivy.
+- **Jenkins**: With plugins Sonarqube Scanner, Docker pipeline, Kubernetes, Kubernetes CLI, Kubernetes Credentials & Kubernetes Client API.
 - **Git**: To clone the repository.
 - **SonarQube**: For code quality analysis.
 - **Trivy**: For security scanning.
 - **Docker Hub**: Account for pushing images.
-- **EKS Cluster**: Configured with `K8-token` credentials.
+- **EKS Cluster**: Configured with `K8-token`(serviceaccount-token) credentials.
 
 ## Setup Instructions
 
